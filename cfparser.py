@@ -114,7 +114,12 @@ def dump_tests_to_file(contest, problem, tests, root='./'):
         return []
 
     tests_path = os.path.join(root, str(contest), problem, TESTS_SUBDIR)
-    os.makedirs(tests_path, exist_ok=True)
+    #os.makedirs(tests_path, exist_ok=True)
+    # added for support with py2
+    try:
+        os.makedirs(tests_path)
+    except OSError:
+        pass
 
     def dump_to_file(data, file_path):
         with open(file_path, 'w') as fout:
@@ -154,8 +159,11 @@ def download_cf_contest(contest, root_path='./'):
 def main():
     parser = ArgumentParser(description='Simple CLI tool for parsing Codeforces contest test samples')
     parser.add_argument('contest', type=int, help='ID of the contest')
+    parser.add_argument('root_dir', type=str, default='./', nargs='?',
+                        help='Optional argument root dir, where file structure will be created. '
+                             'By default, this is current dir')
     args = parser.parse_args()
-    download_cf_contest(args.contest)
+    download_cf_contest(args.contest, args.root_dir)
 
 if __name__ == '__main__':
     main()

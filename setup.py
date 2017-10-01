@@ -17,7 +17,7 @@ setup(name='cfparser',
       py_modules=['cfparser'],
       entry_points={
           'console_scripts': [
-              'cfparse=cfparser:main',
+              'cfparser=cfparser:main',
           ],
       },
       zip_safe=False
