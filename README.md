@@ -81,8 +81,3 @@ cfparse 123
             └── test.out.2
 ```
 
-## Tests
-Unit tests are placed in `tests` directory and can be executed by running
-```
-python tests/run_tests.py
-```
