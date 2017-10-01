@@ -1,13 +1,11 @@
 # codeforces-parser
--------
+
 This is a python script that parses the sample tests from the [Codeforces](http://codeforces.com/) contest problem pages and generates the sample input/output files.
 
 ## Requirements:
--------------
 This tool uses `requests` for loading contest site and `beautifulsoup4` for parsing *HTML*.
 
 ## Installation:
--------------
 [Note] Instalation is not necesary as tool can be run as a script.
 
 CLI tool can be installed by running following command:
@@ -16,7 +14,6 @@ python setup.py install
 ```
 
 ## Usage
-------
 ``` cfparser --help``` prints detailed instructions
 ```
     usage: cfparser [-h] contest [root_dir]
@@ -85,7 +82,6 @@ cfparse 123
 ```
 
 ## Tests
-------
 Unit tests are placed in `tests` directory and can be executred by running
 ```
 python tests/run_tests.py
