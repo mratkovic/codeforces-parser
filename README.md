@@ -6,7 +6,7 @@ This is a python script that parses the sample tests from the [Codeforces](http:
 This tool uses `requests` for loading contest site and `beautifulsoup4` for parsing *HTML*.
 
 ## Installation:
-[Note] Instalation is not necesary as tool can be run as a script.
+[Note] Installation is not necessary, the tool can be run as a script.
 
 CLI tool can be installed by running following command:
 ```
@@ -82,7 +82,7 @@ cfparse 123
 ```
 
 ## Tests
-Unit tests are placed in `tests` directory and can be executred by running
+Unit tests are placed in `tests` directory and can be executed by running
 ```
 python tests/run_tests.py
 ```
