@@ -5,6 +5,7 @@ import tempfile
 import os
 import cfparser.cfparser as cf
 
+
 class CFFilesTests(unittest.TestCase):
 
     def setUp(self):

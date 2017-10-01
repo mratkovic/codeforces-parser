@@ -4,7 +4,6 @@ import cfparser as cf
 
 
 class CFParseTests(unittest.TestCase):
-
     def setUp(self):
         # suppress all log messages during tests
         logging.disable(logging.ERROR)
@@ -42,7 +41,7 @@ class CFParseTests(unittest.TestCase):
         tests = list(cf.parse_problem(100, 'A'))
         self.assertEqual(len(tests), 2)
 
-    def test_parse_n_test1(self):
+    def test_parse_invalid_problem(self):
         tests = list(cf.parse_problem(1, 'Z'))
         self.assertEqual(tests, [])
 
@@ -60,7 +59,7 @@ class CFParseTests(unittest.TestCase):
 
         input_data, output_data = tests[0]
         self.assertEqual(input_data.strip(),
-                          '0.000000 0.000000\n1.000000 1.000000\n0.000000 1.000000')
+                         '0.000000 0.000000\n1.000000 1.000000\n0.000000 1.000000')
         self.assertEqual(output_data.strip(), '1.00000000')
 
     def test_parse_tests3(self):
@@ -78,6 +77,7 @@ class CFParseTests(unittest.TestCase):
         input_data, output_data = tests[2]
         self.assertEqual(input_data.strip(), '12345\n54321')
         self.assertEqual(output_data.strip(), '66666')
+
 
 if __name__ == '__main__':
     unittest.main()
