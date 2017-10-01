@@ -33,7 +33,7 @@ python setup.py install
 Download data for contest with id 123 ([link](http://codeforces.com/contest/123))
 ##### Command
 ```
-cfparse 123
+cfparser 123
 ```
 ##### Files created on drive
 ```
