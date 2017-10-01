@@ -1,9 +1,10 @@
-import unittest
 import logging
+import os
 import shutil
 import tempfile
-import os
-import cfparser.cfparser as cf
+import unittest
+
+import cfparser as cf
 
 
 class CFFilesTests(unittest.TestCase):

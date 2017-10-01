@@ -1,20 +1,40 @@
-import requests
-import os
-from bs4 import BeautifulSoup
 import logging
+import os
 
+import requests
+from argparse import ArgumentParser
+from bs4 import BeautifulSoup
+
+# define logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(levelname)-8s %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__)
 
+# URL schemes
 CONTEST_URL_SCHEME = 'http://codeforces.com/contest/{contest}'
 PROBLEM_URL_SCHEME = 'http://codeforces.com/contest/{contest}/problem/{problem}'
 
+# Test location and naming definition
 TESTS_SUBDIR = 'tests'
-
 IN_FILE_PATTERN = 'test.in.{id}'
 OUT_FILE_PATTERN = 'test.out.{id}'
 
 
 def parse_contest_for_problem_list(contest_id):
+    """
+    Parses codeforces contest page for list of problems.
+
+    Parameters
+    ----------
+    contest_id : int
+        id of codeforces contest, can be seen in the url, example codeforces.com/contest/100/
+
+    Returns
+    -------
+    problem_list : list of strings
+        list of problem names, example ['A', 'B', ...]
+    """
     logger.debug('Parsing problem %s', contest_id)
     url = CONTEST_URL_SCHEME.format(contest=contest_id)
     page = requests.get(url)
@@ -32,6 +52,23 @@ def parse_contest_for_problem_list(contest_id):
 
 
 def parse_problem(contest_id, problem_id):
+    """
+    Parses codeforces problem page for provided test samples.
+
+
+    Parameters
+    ----------
+    contest_id : int
+        id of codeforces contest, can be seen in the url, example codeforces.com/contest/100/
+    problem_id : str
+        name of codeforces problem, can be seen in the url, example codeforces.com/contest/100/problem/A/
+
+    Returns
+    -------
+    tests : zip object
+        zip object of pairs of strings (input, output)
+
+    """
     logger.debug('Parsing problem %s', problem_id)
     url = PROBLEM_URL_SCHEME.format(contest=contest_id, problem=problem_id)
     page = requests.get(url)
@@ -56,6 +93,23 @@ def parse_problem(contest_id, problem_id):
 
 
 def dump_tests_to_file(contest, problem, tests, root='./'):
+    """
+    Dumps parsed tests to files.
+
+    In given `root` creates dir for contest with subdirs for every problem that contain tests directory. Test samples
+    are stored in the tests subdirectory.
+
+    Parameters
+    ----------
+    contest : int
+        id of codeforces contest, can be seen in the url, example codeforces.com/contest/100/
+    problem : str
+        name of codeforces problem, can be seen in the url, example codeforces.com/contest/100/problem/A/
+    tests : zip
+        zip object of pairs of strings (input, output)
+    root : str
+        root dir where tests where file structure will be created
+    """
     if not tests:
         return []
 
@@ -75,6 +129,19 @@ def dump_tests_to_file(contest, problem, tests, root='./'):
 
 
 def download_cf_contest(contest, root_path='./'):
+    """
+    Parses codeforces contest and downloads test data for all the problems.
+
+    Following file structure is created in provided `root_path`:
+        <root_path>/<contest>/<problem>/tests/
+
+    Parameters
+    ----------
+    contest : int
+        id of codeforces contest, can be seen in the url, example codeforces.com/contest/100/
+    root_path : str
+        root dir where tests where file structure will be created
+    """
     logger.info('Parsing contest %s', contest)
     problem_list = parse_contest_for_problem_list(contest)
 
@@ -84,3 +151,11 @@ def download_cf_contest(contest, root_path='./'):
         dump_tests_to_file(contest, problem, tests_data, root_path)
 
 
+def main():
+    parser = ArgumentParser(description='Simple CLI tool for parsing Codeforces contest test samples')
+    parser.add_argument('contest', type=int, help='ID of the contest')
+    args = parser.parse_args()
+    download_cf_contest(args.contest)
+
+if __name__ == '__main__':
+    main()

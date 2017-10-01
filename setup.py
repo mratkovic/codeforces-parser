@@ -7,16 +7,18 @@ setup(name='cfparser',
       keywords='codeforces contests tests parsing',
       url='https://github.com/mratkovic/codeforces-parser',
       author='Marko Ratkovic',
-      author_email='marko.ratkovic0@gmail.com',
+      author_email='marko.ratkovic@yahoo.com',
       license='MIT',
       packages=find_packages(),
       install_requires=[
-            'beautifulsoup4==4.6.0',
-            'certifi==2017.7.27.1',
-            'chardet==3.0.4',
-            'idna==2.6',
-            'requests==2.18.4',
-            'urllib3==1.22'
+          'beautifulsoup4==4.6.0',
+          'requests==2.18.4',
       ],
-      include_package_data=True,
-      zip_safe=False)
+      py_modules=['cfparser'],
+      entry_points={
+          'console_scripts': [
+              'cfparse=cfparser:main',
+          ],
+      },
+      zip_safe=False
+      )
