@@ -38,7 +38,7 @@ optional arguments:
 ```
 
 ### Example 1: Download contest data
-Download data for contest with id 123 ([link](http://codeforces.com/contest/123))
+Download data for contest with id 1 ([link](http://codeforces.com/contest/1))
 ##### Command
 ```
 cfparser 123 ./
