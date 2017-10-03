@@ -62,10 +62,7 @@ cfparser 123 ./
 ```
 ### Example 2: Using templates
 Templates dir can be provided with files that are copied to contest directory and problems subdirectories.
-
 ##### Template dir contents
-Example of templates dir containing `CMakeLists.txt` intended to be copied
-to contest root dir and `main.cpp`, `Makefile` and `test.sh` script that are copied to every problem.
 ```
 templates
 ├── contest
@@ -75,6 +72,9 @@ templates
     ├── Makefile
     └── test.sh
 ```
+Example of templates dir containing `CMakeLists.txt` intended to be copied
+to contest root dir and `main.cpp`, `Makefile` and `test.sh` script that are copied to every problem.
+
 ##### Usage
 ```
 cfparser 1 ./ --template ./templates
