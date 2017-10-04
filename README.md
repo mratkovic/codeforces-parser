@@ -38,10 +38,10 @@ optional arguments:
 ```
 
 ### Example 1: Download contest data
-Download data for contest with id 1 ([link](http://codeforces.com/contest/1))
+Download data for contest with id 1 ([link](http://codeforces.com/contest/1)) to current directory.
 ##### Command
 ```
-cfparser 123 ./
+cfparser 1 ./
 ```
 ##### Files created on drive
 ```
@@ -75,6 +75,7 @@ templates
 Example of templates dir containing `CMakeLists.txt` intended to be copied
 to contest root dir and `main.cpp`, `Makefile` and `test.sh` script that are copied to every problem.
 
+Download contest 1 to current directory and fill contest and problems dirs with templates provided in `./templates` directory.
 ##### Usage
 ```
 cfparser 1 ./ --template ./templates
