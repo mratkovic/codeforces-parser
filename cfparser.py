@@ -118,7 +118,6 @@ def download_cf_contest(contest_type, contest, root_path, templates_dir=None):
         logger.info('Parsing problem %s', problem)
         tests_data = parse_problem(contest_type, contest, problem)
         tests_path = os.path.join(contest_root, problem)
-        # , TESTS_SUBDIR)
         _dump_tests_to_file(tests_data, tests_path)
 
     if templates_dir and len(problem_list) > 1:
