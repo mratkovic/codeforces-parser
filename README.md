@@ -3,24 +3,30 @@
 This is a python script that parses the sample tests from the [Codeforces](http://codeforces.com/) contest problem pages and generates the sample input/output files.
 
 ## Requirements:
-This tool uses `requests` for loading contest site and `beautifulsoup4` for parsing *HTML*.
+
+This tool uses `requests` for loading contest site and `beautifulsoup4` for parsing _HTML_.
 
 ## Installation:
+
 [Note] Installation is not necessary, the tool can be run as a script.
 
 CLI tool can be installed by running following command:
+
 ```
 python setup.py install
 ```
 
 ## Usage
-``` cfparser --help``` prints detailed instructions
+
+`cfparser --help` prints detailed instructions
+
 ```
-usage: cfparser.py [-h] [-t TEMPLATE_DIR] contest [root_dir]
+usage: cfparser.py [-h] [-t TEMPLATE_DIR] type contest [root_dir]
 
 Simple CLI tool for parsing Codeforces contest test samples
 
 positional arguments:
+  type                  Type of contest to be parsed (contest or gym)
   contest               ID of the contest
   root_dir              Optional argument root dir, where file structure will
                         be created. By default, this is current dir
@@ -38,31 +44,40 @@ optional arguments:
 ```
 
 ### Example 1: Download contest data
+
 Download data for contest with id 1 ([link](http://codeforces.com/contest/1)) to current directory.
+
 ##### Command
+
 ```
-cfparser 1 ./
+cfparser contest 1 ./
 ```
+
 ##### Files created on drive
+
 ```
 .1
 ├── A
 │   └── tests
-│       ├── test.in.0
-│       └── test.out.0
+│       ├── 1.in
+│       └── 1.out
 ├── B
 │   └── tests
-│       ├── test.in.0
-│       └── test.out.0
+│       ├── 1.in
+│       └── 1.out
 └── C
     └── tests
-        ├── test.in.0
-        └── test.out.0
+        ├── 1.in
+        └── 1.out
 
 ```
+
 ### Example 2: Using templates
+
 Templates dir can be provided with files that are copied to contest directory and problems subdirectories.
+
 ##### Template dir contents
+
 ```
 templates
 ├── contest
@@ -72,41 +87,43 @@ templates
     ├── Makefile
     └── test.sh
 ```
+
 Example of templates dir containing `CMakeLists.txt` intended to be copied
 to contest root dir and `main.cpp`, `Makefile` and `test.sh` script that are copied to every problem.
 
 Download contest 1 to current directory and fill contest and problems dirs with templates provided in `./templates` directory.
-##### Usage
-```
-cfparser 1 ./ --template ./templates
-```
 
+##### Usage
+
+```
+cfparser 1 contest ./ --template ./templates
+```
 
 ##### Files created on drive
+
 ```
 1
 ├── A
 │   ├── main.cpp
 │   ├── Makefile
 │   ├── tests
-│   │   ├── test.in.0
-│   │   └── test.out.0
+│   │   ├── 1.in
+│   │   └── 1.out
 │   └── test.sh
 ├── B
 │   ├── main.cpp
 │   ├── Makefile
 │   ├── tests
-│   │   ├── test.in.0
-│   │   └── test.out.0
+│   │   ├── 1.in
+│   │   └── 1.out
 │   └── test.sh
 ├── C
 │   ├── main.cpp
 │   ├── Makefile
 │   ├── tests
-│   │   ├── test.in.0
-│   │   └── test.out.0
+│   │   ├── 1.in
+│   │   └── 1.out
 │   └── test.sh
 └── CMakeLists.txt
 
 ```
-

@@ -13,16 +13,15 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 # URL schemes
-CONTEST_URL_SCHEME = 'http://codeforces.com/contest/{contest}'
-PROBLEM_URL_SCHEME = 'http://codeforces.com/contest/{contest}/problem/{problem}'
+CONTEST_URL_SCHEME = 'http://codeforces.com/{type}/{contest}'
+PROBLEM_URL_SCHEME = 'http://codeforces.com/{type}/{contest}/problem/{problem}'
 
 # Test location and naming definition
-TESTS_SUBDIR = 'tests'
-IN_FILE_PATTERN = 'test.in.{id}'
-OUT_FILE_PATTERN = 'test.out.{id}'
+IN_FILE_PATTERN = '{id}.in'
+OUT_FILE_PATTERN = '{id}.out'
 
 
-def parse_contest_for_problem_list(contest_id):
+def parse_contest_for_problem_list(contest_type, contest_id):
     """
     Parses codeforces contest page for list of problems.
 
@@ -37,7 +36,7 @@ def parse_contest_for_problem_list(contest_id):
         list of problem names, example ['A', 'B', ...]
     """
     logger.debug('Parsing problem %s', contest_id)
-    url = CONTEST_URL_SCHEME.format(contest=contest_id)
+    url = CONTEST_URL_SCHEME.format(type=contest_type, contest=contest_id)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -52,7 +51,7 @@ def parse_contest_for_problem_list(contest_id):
     return problem_list
 
 
-def parse_problem(contest_id, problem_id):
+def parse_problem(contest_type, contest_id, problem_id):
     """
     Parses codeforces problem page for provided test samples.
 
@@ -71,7 +70,7 @@ def parse_problem(contest_id, problem_id):
 
     """
     logger.debug('Parsing problem %s', problem_id)
-    url = PROBLEM_URL_SCHEME.format(contest=contest_id, problem=problem_id)
+    url = PROBLEM_URL_SCHEME.format(type=contest_type, contest=contest_id, problem=problem_id)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
@@ -93,7 +92,7 @@ def parse_problem(contest_id, problem_id):
     return zip(ins, outs)
 
 
-def download_cf_contest(contest, root_path, templates_dir=None):
+def download_cf_contest(contest_type, contest, root_path, templates_dir=None):
     """
     Parses codeforces contest and downloads test data for all the problems.
     Following file structure is created in provided `root_path`:
@@ -112,13 +111,13 @@ def download_cf_contest(contest, root_path, templates_dir=None):
         templates source directory, if None it is simply ignored.
     """
     logger.info('Parsing contest %s', contest)
-    problem_list = parse_contest_for_problem_list(contest)
+    problem_list = parse_contest_for_problem_list(contest_type, contest)
     contest_root = os.path.join(root_path, str(contest))
 
     for problem in problem_list:
         logger.info('Parsing problem %s', problem)
-        tests_data = parse_problem(contest, problem)
-        tests_path = os.path.join(contest_root, problem, TESTS_SUBDIR)
+        tests_data = parse_problem(contest_type, contest, problem)
+        tests_path = os.path.join(contest_root, problem)
         _dump_tests_to_file(tests_data, tests_path)
 
     if templates_dir and len(problem_list) > 1:
@@ -147,11 +146,11 @@ def _dump_tests_to_file(tests, tests_path='./'):
 
     def dump_to_file(data, file_path):
         with open(file_path, 'w') as fout:
-            fout.write(data)
+            fout.write(data.lstrip())
 
     for i, (in_data, out_data) in enumerate(tests):
-        in_path = os.path.join(tests_path, IN_FILE_PATTERN.format(id=i))
-        out_path = os.path.join(tests_path, OUT_FILE_PATTERN.format(id=i))
+        in_path = os.path.join(tests_path, IN_FILE_PATTERN.format(id=i+1))
+        out_path = os.path.join(tests_path, OUT_FILE_PATTERN.format(id=i+1))
 
         dump_to_file(in_data, in_path)
         dump_to_file(out_data, out_path)
@@ -189,6 +188,7 @@ def _copy_content(src, dest):
 
 def main():
     parser = ArgumentParser(description='Simple CLI tool for parsing Codeforces contest test samples')
+    parser.add_argument('type', type=str, help='Type of the contest (contest, gym, etc, ...)')
     parser.add_argument('contest', type=int, help='ID of the contest')
     parser.add_argument('root_dir', type=str, default='./', nargs='?',
                         help='Optional argument root dir, where file structure will be created. '
@@ -199,7 +199,7 @@ def main():
                              'with template files that are copied to every problem subdirectory. '
                              'If not provided, no templates are copied.')
     args = parser.parse_args()
-    download_cf_contest(args.contest, args.root_dir, args.template_dir)
+    download_cf_contest(args.type, args.contest, args.root_dir, args.template_dir)
 
 
 if __name__ == '__main__':
